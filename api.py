@@ -79,23 +79,36 @@ def predict(image_path, model):
     return np.vstack((predictions)).ravel()
 
 
-@app.route("/", methods=["GET", "POST"])
+# @app.route("/", methods=["GET", "POST"])
+# def upload_predict():
+#     if request.method == "POST":
+#         image_file = request.files["image"]
+#         if image_file:
+#             image_location = os.path.join(
+#                 UPLOAD_FOLDER,
+#                 image_file.filename
+#             )
+#             image_file.save(image_location)
+#             pred = predict(image_location, MODEL)[0]
+#             return render_template("index.html", prediction=pred, image_loc=image_file.filename)
+#     return render_template("index.html", prediction=0, image_loc=None)
+
+@app.route("/", methods=["GET"])
 def upload_predict():
-    if request.method == "POST":
-        image_file = request.files["image"]
-        if image_file:
-            image_location = os.path.join(
-                UPLOAD_FOLDER,
-                image_file.filename
-            )
-            image_file.save(image_location)
-            pred = predict(image_location, MODEL)[0]
-            return render_template("index.html", prediction=pred, image_loc=image_file.filename)
+#     if request.method == "POST":
+#         image_file = request.files["image"]
+#         if image_file:
+#             image_location = os.path.join(
+#                 UPLOAD_FOLDER,
+#                 image_file.filename
+#             )
+#             image_file.save(image_location)
+#             pred = predict(image_location, MODEL)[0]
+#             return render_template("index.html", prediction=pred, image_loc=image_file.filename)
     return render_template("index.html", prediction=0, image_loc=None)
 
-
 if __name__ == "__main__":
-    MODEL = SEResNext50_32x4d(pretrained=None)
-    MODEL.load_state_dict(torch.load("model.bin", map_location=torch.device(DEVICE)))
-    MODEL.to(DEVICE)
-    app.run(host="0.0.0.0", port=12000, debug=True)
+    #MODEL = SEResNext50_32x4d(pretrained=None)
+    #MODEL.load_state_dict(torch.load("model.bin", map_location=torch.device(DEVICE)))
+    #MODEL.to(DEVICE)
+    app.run(host="0.0.0.0", port=8080, debug=True)
