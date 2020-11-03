@@ -3,5 +3,5 @@ cmake
 albumentations
 flask
 pretrainedmodels
-torch==1.5.0
+torch==1.6.0
 wtfml==0.0.2
