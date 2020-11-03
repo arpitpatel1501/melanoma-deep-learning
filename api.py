@@ -3,21 +3,21 @@
 # function to make prediction on the image
 # show the results
 import os
-import torch
+# import torch
 
-import albumentations
-import pretrainedmodels
+# import albumentations
+# import pretrainedmodels
 
 import numpy as np
-import torch.nn as nn
+# import torch.nn as nn
 
 from flask import Flask
 from flask import request
 from flask import render_template
-from torch.nn import functional as F
+# from torch.nn import functional as F
 
-from wtfml.data_loaders.image import ClassificationLoader
-from wtfml.engine import Engine
+# from wtfml.data_loaders.image import ClassificationLoader
+# from wtfml.engine import Engine
 
 
 app = Flask(__name__)
@@ -26,57 +26,57 @@ DEVICE = "cpu"
 MODEL = None
 
 
-class SEResNext50_32x4d(nn.Module):
-    def __init__(self, pretrained="imagenet"):
-        super(SEResNext50_32x4d, self).__init__()
-        self.base_model = pretrainedmodels.__dict__[
-            "se_resnext50_32x4d"
-        ](pretrained=pretrained)
-        self.l0 = nn.Linear(2048, 1)
+# class SEResNext50_32x4d(nn.Module):
+#     def __init__(self, pretrained="imagenet"):
+#         super(SEResNext50_32x4d, self).__init__()
+#         self.base_model = pretrainedmodels.__dict__[
+#             "se_resnext50_32x4d"
+#         ](pretrained=pretrained)
+#         self.l0 = nn.Linear(2048, 1)
 
-    def forward(self, image, targets):
-        bs, _, _, _ = image.shape
-        x = self.base_model.features(image)
-        x = F.adaptive_avg_pool2d(x, 1)
-        x = x.reshape(bs, -1)
-        out = torch.sigmoid(self.l0(x))
-        loss = 0
-        return out, loss
+#     def forward(self, image, targets):
+#         bs, _, _, _ = image.shape
+#         x = self.base_model.features(image)
+#         x = F.adaptive_avg_pool2d(x, 1)
+#         x = x.reshape(bs, -1)
+#         out = torch.sigmoid(self.l0(x))
+#         loss = 0
+#         return out, loss
 
 
-def predict(image_path, model):
-    mean = (0.485, 0.456, 0.406)
-    std = (0.229, 0.224, 0.225)
+# def predict(image_path, model):
+#     mean = (0.485, 0.456, 0.406)
+#     std = (0.229, 0.224, 0.225)
 
-    test_aug = albumentations.Compose(
-        [
-            albumentations.Normalize(mean, std, max_pixel_value=255.0, always_apply=True),
-        ]
-    )
+#     test_aug = albumentations.Compose(
+#         [
+#             albumentations.Normalize(mean, std, max_pixel_value=255.0, always_apply=True),
+#         ]
+#     )
 
-    test_images = [image_path]
-    test_targets = [0]
+#     test_images = [image_path]
+#     test_targets = [0]
 
-    test_dataset = ClassificationLoader(
-        image_paths=test_images,
-        targets=test_targets,
-        resize=None,
-        augmentations=test_aug
-    )
+#     test_dataset = ClassificationLoader(
+#         image_paths=test_images,
+#         targets=test_targets,
+#         resize=None,
+#         augmentations=test_aug
+#     )
 
-    test_loader = torch.utils.data.DataLoader(
-        test_dataset,
-        batch_size=1,
-        shuffle=False,
-        num_workers=0
-    )
+#     test_loader = torch.utils.data.DataLoader(
+#         test_dataset,
+#         batch_size=1,
+#         shuffle=False,
+#         num_workers=0
+#     )
 
-    predictions = Engine.predict(
-        test_loader,
-        model,
-        DEVICE
-    )
-    return np.vstack((predictions)).ravel()
+#     predictions = Engine.predict(
+#         test_loader,
+#         model,
+#         DEVICE
+#     )
+#     return np.vstack((predictions)).ravel()
 
 
 # @app.route("/", methods=["GET", "POST"])
