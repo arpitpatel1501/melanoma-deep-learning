@@ -13,3 +13,7 @@ USER abhishek
 RUN cd /home/abhishek/app/ && pip3 install -r requirements.txt
 
 WORKDIR /home/abhishek/app
+
+EXPOSE 8080
+
+ENTRYPOINT python3 api.py
