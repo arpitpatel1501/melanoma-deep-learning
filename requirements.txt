@@ -1,5 +1,3 @@
-scikit-build
-cmake
 flask
 pretrainedmodels
 torch==1.6.0
