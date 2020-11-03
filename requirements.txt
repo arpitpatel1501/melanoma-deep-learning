@@ -1,3 +1,5 @@
+scikit-build
+cmake
 albumentations
 flask
 pretrainedmodels
